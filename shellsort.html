@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<head>
+    <style>
+        div {margin-left: 10px;margin-top: 20px}
+        text {fill: black;}
+        rect {fill: blue;}
+        .sorted {fill: red;}
+        .min {fill: red;}
+        .testing {fill: red;}
+		.not-changed {fill: yellow;}
+		body{
+			margin: auto;
+			padding: auto;
+		}
+
+		p{
+			width:1200px;
+			font-size: 25px;
+		}
+
+		.buttons{
+			margin: 0 auto;
+			display: flex;
+			flex-direction: column;
+			flex-wrap: wrap;
+			width: 400px;
+		}
+
+		.container{
+			display: flex;
+			flex-direction: column;
+			height: 400px;
+			width: 400px;
+		}
+		
+		.process {
+			display: flex;
+			flex-direction: column;
+		}
+
+		.pseudocode{
+			float: right;
+			margin-top:-600px,
+		}
+
+		.step{
+			background-color: #f1f1f1;
+			margin: 10px;
+			padding: 5px;
+			font-size: 30px;
+			height: 50px;
+			width: 350px;
+		}
+
+		.active {
+			background-color: green;
+			color: #fff;
+		}
+
+		.button{
+			border: none;
+			color: black;
+			padding: 20px;
+			text-align: center;
+			text-decoration: none;
+			display: inline-block;
+			font-size: 16px;
+			margin: 4px 2px;
+			cursor: pointer;
+			border-radius: 4px;
+			width: 150px;
+		}
+		
+		.btn{
+			display: flex;
+		}
+
+		.radio{
+			display: flex;
+		}
+
+		.radios{
+			display: flex;
+			flex-direction: column;
+		}
+		
+		.main{
+			display: flex;
+			justify-content: space-between;
+		}
+
+		svg {
+			float: left;
+			
+		}
+
+		.button:hover {
+		  border: 1px solid #0099cc;
+		  background-color: #00aacc;
+		  color: #ffffff;
+		}
+
+		.button:disabled,
+		.button[disabled]{
+		  border: 1px solid #999999;
+		  background-color: #cccccc;
+		  color: #666666;
+		}
+
+    </style>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+</head>
+<body>
+	
+    <div id="buttons">
+		<h1>Shell Sort</h1>
+		<h3>Shell Sort Algoritması Nedir?</h3>
+	
+			<p>
+		Shell sort algoritmasının türkçesi kabuk sıralama algoritmasıdır. 
+        İsmi Türkçeye kabuk sıralaması olarak çevrilsede aslında Donald Shell isimli algoritmayı ilk bulan kişinin isminden gelmektedir.Sıralama işlemi için öncelikle bir atlama miktarı belirlenir. En basit yöntem elimizdeki sayıların yarısından başlamaktır. Tek sayı olduğu zaman aşağı yuvarlanır. Sırasıyla her sayı atlama miktarı kadar sonraki sayı ile karşılaştırılır. Bu işlem bütün diziye yapılır. Atlama miktarı yarıya bölünür.Atlama miktarı 1 olana kadar devam edilir. Algoritma performansı O(n2)’dir.
+			</p>
+		<div class="pseudocode">		
+		<center><h3>Pseudo Code</h3></center>
+		<div class="container">
+      		<div  id="adim-1" class="step"> başla ShellSort(list) </div>
+      		<div  id="adim-2" class="step"> aralık 0 olana kadar </div>
+      		<div  id="adim-3" class="step"> aralık belirle </div> 
+      		<div  id="adim-4" class="step"> her elaman için </div>
+      		<div  id="adim-5" class="step">  aralık kadar sonraki eleman ile kontrol et </div>
+      		<div  id="adim-6" class="step">  if(daha küçükse) swap[i,j] </div>
+      		<div  id="adim-7" class="step">  bitir ShellSort(list) </div>
+		</div>
+	</div>
+	<div class="main">
+		<div class="process">
+				<h3>Sıralama Metodu:</h3>
+			   	<div>Adımlar: <span id="counter">0</span></div>
+				<div class="btn">
+		        <input type="button" class="button" id="button-1" onclick="bubbleSort()" value="Başlat"/>
+				<input type="button" class="button" id="button-2" onclick="stop = true" value="Durdur"/>
+		        <input type="button" class="button" onclick="reset()" value="Yeniden Başlat"/>
+		        </div>
+		</div>
+	</div>
+
+
+	</div>
+
+
+	<div class="js"> 
+	<script>
+
+		function activeStep(element) {
+			var step = document.getElementById(element).classList.add("active");
+		}
+
+		function deactiveStep(element) {
+			var step = document.getElementById(element).classList.remove("active");
+		}
+
+		
+		
+		document.getElementById("button-2").disabled = true;
+		deactiveStep("adim-5");
+		
+
+		var countVal = "";
+		var count = 1 + parseInt(countVal),
+		durationTime = 20000/count,
+		array = d3.shuffle(d3.range()),
+		unsortedArray = [...array],
+		sortedArray = [],
+		stop = false,
+		steps = 0,
+		continueVal=0;
+
+		activeStep("adim-2");
+		
+		if (confirm("Sıralamak istediğiniz sayıları rastgele oluşturmak için \"TAMAM\" butonuna,kendiniz girmek için \"İPTAL\" butonuna basınız.")) {
+			
+			var countVal = prompt("Kaç farklı sayıyı sıralamak istiyorsunuz? (Sınır 1-50)");
+			
+			if(countVal>1 && countVal<51)
+			{
+				count = 1 + parseInt(countVal),
+				durationTime = 50000/count,
+				array = d3.shuffle(d3.range(1,count)),
+				unsortedArray = [...array];
+			}
+			else
+				prompt("Lütfen 1-50 arası değer girin.");
+		} 
+		else {
+			var values=prompt("Lütfen sıralanmasını istediğiniz birbirinden farklı değerleri aralarında virgül olacak şekilde boşluk bırakmadan giriniz:");
+			var customArray = values.split(',').map(Number);
+			console.log(customArray);
+			if(isNaN(customArray.length)==true || customArray.length <= 1){
+				alert("Hatalı giriş yaptınız!");
+				location.reload();
+			}
+			else{
+				count = 1 + customArray.length,
+				durationTime = 50000/count,
+				array = customArray,
+				unsortedArray = [...array];
+			}
+
+		}
+				var N = unsortedArray.length;
+				var h = Math.floor(N/2);
+
+			
+			var margin = {top: 40, right: 40, bottom: 180, left: 40},
+				width = 900 - margin.left - margin.right,
+				height = 5000 - margin.top - margin.bottom;
+
+			var barWidth = width/count;
+
+			var x = d3.scaleLinear()
+				.domain([0,count])
+				.range([0, width]);
+
+			var svg = d3.select("body").append("svg")
+				.attr("width", width + margin.left + margin.right)
+				.attr("height", height + margin.top + margin.bottom)
+				.attr("id", "svgDiv")
+			  .append("g")
+				.attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+			  
+			var rects = svg.append("g")
+				.attr("transform", "translate(" + barWidth + ",2)")
+				.selectAll("rect")
+				.data(unsortedArray)
+			  .enter().append("rect")
+			
+			var labels = svg.selectAll("text")
+				.data(unsortedArray)
+			  	.enter().append("text")
+				
+			labels.attr("id", function(d) {return "text" + d})
+				.attr("transform", function(d, i) {return "translate(" + x(i) + ",0)"})
+				.html(function(d) {return d;})
+
+			rects.attr("id", function(d) {return "rect" + d})
+				.attr("transform", function(d, i) {return "translate(" + (x(i) - barWidth) + ",0)"})
+				.attr("width", barWidth *.9)
+				.attr("height", function(d) {return d*barWidth/3})
+
+
+	    function reset() {
+			continueVal=0;
+	        unsortedArray = [...array];
+	        sortedArray = [];
+	        stop = false;
+			document.getElementById("button-2").disabled = true;					
+			document.getElementById("button-1").disabled = false;
+			document.getElementById("button-1").value = "Başlat";
+
+
+	        deactiveStep("adim-5");
+	        activeStep("adim-2");
+
+	        d3.select(".container #counter").html(steps = 0)
+
+	        labels.attr("class", "")                
+	            .transition().duration(1000)
+	            .attr("transform", function(d, i) {return "translate(" + (x(i)) + ", 0)"})              
+	        
+	        rects.attr("class", "")                
+	            .transition().duration(1000)
+	            .attr("transform", function(d, i) {return "translate(" + (x(i-1)) + ", 0)"})
+	    }
+
+	   	
+
+		function bubbleSort() {
+			
+
+			deactiveStep("adim-2");
+			
+			document.getElementById("button-1").value = "Devam";
+			document.getElementById("button-2").disabled = false;
+			document.getElementById("button-1").disabled = true;
+
+	        var sortedCount = 0;
+
+
+				if(stop){
+					document.getElementById("button-2").disabled = true;					
+					document.getElementById("button-1").disabled = false;
+					
+					i--;
+					if (unsortedArray[i] < unsortedArray[j-1]) {
+						d3.select("#rect" + unsortedArray[j]).attr("class", "testing")
+	                    d3.select("#rect" + unsortedArray[j-1]).attr("class", "testing")
+					}
+					else{
+						d3.select("#rect" + unsortedArray[j]).attr("class", "not-changed")
+	                    d3.select("#rect" + unsortedArray[j-1]).attr("class", "not-changed")
+					}
+
+					continueVal=i;
+					deactiveStep("adim-3");
+					return stop = false
+				}
+				var adim3 = document.getElementById("adim-3");
+				adim3.textContent = adim3.textContent.replace("<",">");
+				activeStep("adim-4");
+
+    				for(var i = h; i < N; i++) {
+      					for(var j = i; j >= h ; j -= h) {
+      						setTimeout(function() {
+								deactiveStep("adim-4");
+								activeStep("adim-5");
+							}, 30000);
+      						if(unsortedArray[j] < unsortedArray[j-h]){
+      							d3.select("#rect" + unsortedArray[j]).attr("class", "testing")
+								d3.select("#rect" + unsortedArray[j-h]).attr("class", "testing")
+
+								d3.timeout(function() {
+									d3.select("#rect" + unsortedArray[j]).attr("class", "")
+									d3.select("#rect" + unsortedArray[j-h]).attr("class", "")                                            
+								}, durationTime);
+
+								swap(unsortedArray, j, j-h);
+
+      							setTimeout(function() {
+									deactiveStep("adim-5");
+									activeStep("adim-6");
+								}, 30000);
+
+								slide(unsortedArray[j], j + sortedArray);
+								slide(unsortedArray[j-h], j-h + sortedArray);
+								d3.select("#counter").html(++steps);
+
+								d3.timeout(function() {activeStep("adim-3");deactiveStep("adim-6");}, durationTime);
+      						}
+      						else{
+      						}
+
+   						}
+    				} 				
+    				h = Math.floor(h/2);
+    				if(h>=1)
+    					d3.timeout(function() {return bubbleSort()}, durationTime);
+			}
+
+
+	    function slide(d, i) {
+	        d3.select("#text" + d)
+	            .transition().duration(durationTime)
+	            .attr("transform", function(d) {return "translate(" + (x(i)) + ", 0)"})
+
+	        d3.select("#rect" + d)
+	            .transition().duration(durationTime)
+	            .attr("transform", function(d) {return "translate(" + (x(i-1)) + ", 0)"})                
+	    }
+	    function swap(arr, i, j) {
+ 			var t = arr[i];
+  			arr[i] = arr[j];
+  			arr[j] = t;
+		}	
+	</script>
+	</div>
+</body>
